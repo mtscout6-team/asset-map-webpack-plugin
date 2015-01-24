@@ -10,20 +10,25 @@ function AssetMapPlugin(publicPath, outputFile) {
 AssetMapPlugin.prototype.apply = function(compiler) {
   compiler.plugin('done', function AssetMapFileGenerator(stats) {
     var requestShortener = new RequestShortener(path.dirname(this.outputFile));
+    var emitted = false;
     var assets = stats.compilation.modules
       .map(function(m) {
         return {
           name: m.readableIdentifier(requestShortener),
-          assets: Object.keys(m.assets || {})
-        }
+          assets: Object.keys(m.assets || {}),
+          module: m
+        };
       }).filter(function(m){
         return m.assets.length > 0;
       }).reduce(function(acc, m) {
+        emitted = emitted || m.assets[0].emitted;
         acc[m.name] = path.join(this.publicPath, m.assets[0]);
         return acc;
       }.bind(this), {});
 
-    fs.writeFileSync(this.outputFile, JSON.stringify(assets));
+    if (emitted) {
+      fs.writeFileSync(this.outputFile, JSON.stringify(assets));
+    }
   }.bind(this));
 };
 
