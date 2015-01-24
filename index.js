@@ -2,12 +2,12 @@ var fs = require('fs');
 var path = require('path');
 var RequestShortener = require('webpack/lib/RequestShortener');
 
-function AssetMapFilePlugin(publicPath, outputFile) {
+function AssetMapPlugin(publicPath, outputFile) {
   this.publicPath = publicPath;
   this.outputFile = outputFile;
 };
 
-AssetMapFilePlugin.prototype.apply = function(compiler) {
+AssetMapPlugin.prototype.apply = function(compiler) {
   compiler.plugin('done', function AssetMapFileGenerator(stats) {
     var requestShortener = new RequestShortener(path.dirname(this.outputFile));
     var assets = stats.compilation.modules
@@ -27,4 +27,4 @@ AssetMapFilePlugin.prototype.apply = function(compiler) {
   }.bind(this));
 };
 
-module.exports = AssetMapFilePlugin;
+module.exports = AssetMapPlugin;
