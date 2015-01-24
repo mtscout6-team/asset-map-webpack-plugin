@@ -13,16 +13,23 @@ AssetMapPlugin.prototype.apply = function(compiler) {
     var emitted = false;
     var assets = stats.compilation.modules
       .map(function(m) {
+        var assets = Object.keys(m.assets || {});
+
+        if (assets.length === 0) {
+          return undefined;
+        }
+
+        var asset = assets[0];
+        emitted = emitted || m.assets[asset].emitted;
+
         return {
           name: m.readableIdentifier(requestShortener),
-          assets: Object.keys(m.assets || {}),
-          module: m
+          asset: asset
         };
       }).filter(function(m){
-        return m.assets.length > 0;
+        return m !== undefined;
       }).reduce(function(acc, m) {
-        emitted = emitted || m.assets[0].emitted;
-        acc[m.name] = path.join(this.publicPath, m.assets[0]);
+        acc[m.name] = path.join(this.publicPath, m.asset);
         return acc;
       }.bind(this), {});
 
