@@ -7,8 +7,21 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Smith <mtscout6@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "webpack": "^1.5.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mtscout6/asset-map-webpack-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "webpack-plugin"
+  ],
+  "bugs": {
+    "url": "https://github.com/mtscout6/asset-map-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/mtscout6/asset-map-webpack-plugin"
 }
