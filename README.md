@@ -6,8 +6,13 @@ Creates a json file that any server side technology can consume for asset declar
 
 ``` json
 {
-    "./images/favicon.png": "/assets/8f6f13d598e912ac61d3bc88b248ec8e.png",
-    "./images/javascript.png": "/assets/32e1e05a1be1599842f488647e1d04f0.png"
+    "assets": {
+        "./smiley.jpeg": "/assets/smiley-db4f287d06928156270ca185fef0e026.jpeg",
+        "./test-checklist.jpeg": "/assets/test-checklist-b3b0fe76f4485db43467876f664d1f62.jpeg"
+    },
+    "chunks": {
+        "index": "/assets/index-2c9c445686f51177cf62.js"
+    }
 }
 ```
 
@@ -23,7 +28,13 @@ var AssetMapPlugin = require('asset-map-webpack-plugin');
 module.exports = {
   ...
   plugins: [
-    new AssetMapPlugin(publicPath, outputFilename)
+    /**
+     * AssetMapPlugin
+     *
+     * @param {string} outputFile - Where to write the asset map file
+     * @param {string} [relativeTo] - Key assets relative to this path, otherwise defaults to be relative to the directory where the outputFile is written
+     */
+    new AssetMapPlugin(outputFilename, relativeTo)
   ]
 };
 ```
