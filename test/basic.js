@@ -1,14 +1,15 @@
-var webpack = require('webpack');
-var rimraf = require('rimraf');
-var fs = require('fs');
-var basicConfig = require('./webpack.basic.config');
-var touch = require('touch');
-var mapFilePath = basicConfig.plugins[0].outputFile;
+import webpack from 'webpack';
+import rimraf from 'rimraf';
+import fs from 'fs';
+import config from './webpack.basic.config';
+import touch from 'touch';
 
-describe('Basic use case', function() {
+var mapFilePath = config.plugins[0].outputFile;
+
+describe('Basic use case', () => {
   it('Generates map.json with map to asset entries', function (done) {
-    rimraf(basicConfig.output.path, function() {
-      webpack(basicConfig, function(err, stats) {
+    rimraf(config.output.path, function() {
+      webpack(config, function(err, stats) {
         if (err) throw err;
         if (stats.hasErrors()) throw 'webpack has errors';
         if (stats.hasWarnings()) throw 'webpack has warnings';
@@ -26,8 +27,8 @@ describe('Basic use case', function() {
 
   it('Only emits if an asset has changed', function(done){
     this.timeout(5000);
-    rimraf(basicConfig.output.path, function() {
-      var compiler = webpack(basicConfig);
+    rimraf(config.output.path, function() {
+      var compiler = webpack(config);
       var watcher;
       var lastMapStats;
       var assetMap = __dirname + '/app/assets/map.json';

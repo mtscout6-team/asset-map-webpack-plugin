@@ -1,4 +1,4 @@
-var AssetMapPlugin = require('../');
+var AssetMapPlugin = require('../src');
 var baseDir = __dirname + '/app';
 
 module.exports = {

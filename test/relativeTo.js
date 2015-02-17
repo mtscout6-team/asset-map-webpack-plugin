@@ -1,7 +1,8 @@
-var webpack = require('webpack');
-var rimraf = require('rimraf');
-var fs = require('fs');
-var config = require('./webpack.relativeTo.config');
+import webpack from 'webpack';
+import rimraf from 'rimraf';
+import fs from 'fs';
+import config from './webpack.relativeTo.config';
+
 var mapFilePath = config.plugins[0].outputFile;
 
 describe('Relative to use case', function() {

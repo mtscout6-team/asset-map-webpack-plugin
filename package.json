@@ -2,9 +2,10 @@
   "name": "asset-map-webpack-plugin",
   "version": "0.0.4",
   "description": "Webpack plugin that creates a map of assets to public url slug for server agnostic usage.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "pre-publish": "babel src --out-dir lib",
+    "test": "mocha --compilers js:babel/register"
   },
   "author": "Matt Smith <mtscout6@gmail.com>",
   "license": "MIT",
@@ -12,6 +13,7 @@
     "webpack": "^1.5.3"
   },
   "devDependencies": {
+    "babel": "^4.1.1",
     "chai": "^2.0.0",
     "file-loader": "^0.8.1",
     "mocha": "^2.1.0",
