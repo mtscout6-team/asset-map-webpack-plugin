@@ -1,5 +1,7 @@
 # Webpack Asset Map Plugin
 
+[![Build Status](https://travis-ci.org/mtscout6/asset-map-webpack-plugin.svg?branch=master)](https://travis-ci.org/mtscout6/asset-map-webpack-plugin)
+
 Creates a json file that any server side technology can consume for asset declarations. Example output file:
 
 ``` json
