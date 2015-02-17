@@ -11,7 +11,12 @@
   "dependencies": {
     "webpack": "^1.5.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^2.0.0",
+    "file-loader": "^0.8.1",
+    "mocha": "^2.1.0",
+    "rimraf": "^2.2.8"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mtscout6/asset-map-webpack-plugin.git"
