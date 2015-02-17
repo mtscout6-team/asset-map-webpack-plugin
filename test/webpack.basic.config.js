@@ -7,7 +7,7 @@ module.exports = {
   },
 
   output: {
-    filename: '[name].js',
+    filename: '[name]-[hash].js',
     path: baseDir + '/assets',
     publicPath: '/assets/'
   },
@@ -20,6 +20,6 @@ module.exports = {
   },
 
   plugins: [
-    new AssetMapPlugin('/assets/', baseDir + '/assets/map.json')
+    new AssetMapPlugin(baseDir + '/assets/map.json')
   ]
 };
