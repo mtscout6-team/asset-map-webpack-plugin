@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var rimraf = require('rimraf');
 var fs = require('fs');
-var basicConfig = require('./basic/webpack.config');
+var basicConfig = require('./webpack.basic.config');
 var touch = require('touch');
 var mapFilePath = basicConfig.plugins[0].outputFile;
 
@@ -30,9 +30,9 @@ describe('Basic use case', function() {
       var compiler = webpack(basicConfig);
       var watcher;
       var lastMapStats;
-      var assetMap = __dirname + '/basic/assets/map.json';
-      var indexJs = __dirname + '/basic/index.js';
-      var smiley = __dirname + '/basic/smiley.jpeg';
+      var assetMap = __dirname + '/app/assets/map.json';
+      var indexJs = __dirname + '/app/index.js';
+      var smiley = __dirname + '/app/smiley.jpeg';
       var watchCompletions = [
         function FirstWatchComplete() {
           lastMapStats = fs.statSync(assetMap);

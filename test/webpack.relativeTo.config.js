@@ -1,13 +1,14 @@
-var AssetMapPlugin = require('../../');
+var AssetMapPlugin = require('../');
+var baseDir = __dirname + '/app';
 
 module.exports = {
   entry: {
-    index: __dirname + '/index.js'
+    index: baseDir + '/index.js'
   },
 
   output: {
     filename: '[name].js',
-    path: __dirname + '/assets',
+    path: baseDir + '/assets',
     publicPath: '/assets/'
   },
 
@@ -19,6 +20,6 @@ module.exports = {
   },
 
   plugins: [
-    new AssetMapPlugin('/assets/', __dirname + '/assets/map.json')
+    new AssetMapPlugin('/assets/', baseDir + '/assets/map.json', baseDir)
   ]
 };

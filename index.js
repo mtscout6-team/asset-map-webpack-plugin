@@ -2,14 +2,23 @@ var fs = require('fs');
 var path = require('path');
 var RequestShortener = require('webpack/lib/RequestShortener');
 
-function AssetMapPlugin(publicPath, outputFile) {
+/**
+ * AssetMapPlugin
+ * @class
+ *
+ * @param {string} publicPath - Public path used in url request
+ * @param {string} outputFile - Where to write the asset map file
+ * @param {string} [relativeTo=outputFile] - Key assets relative to this path, otherwise defaults to be relative to where the outputFile is written
+ */
+function AssetMapPlugin(publicPath, outputFile, relativeTo) {
   this.publicPath = publicPath;
   this.outputFile = outputFile;
+  this.relativeTo = relativeTo;
 };
 
 AssetMapPlugin.prototype.apply = function(compiler) {
   compiler.plugin('done', function AssetMapFileGenerator(stats) {
-    var requestShortener = new RequestShortener(path.dirname(this.outputFile));
+    var requestShortener = new RequestShortener(this.relativeTo || path.dirname(this.outputFile));
     var emitted = false;
     var assets = stats.compilation.modules
       .map(function(m) {
