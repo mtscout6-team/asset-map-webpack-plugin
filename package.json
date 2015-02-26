@@ -15,9 +15,14 @@
   "devDependencies": {
     "babel": "^4.1.1",
     "chai": "^2.0.0",
+    "css-loader": "^0.9.1",
+    "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
+    "less": "^2.4.0",
+    "less-loader": "^2.0.0",
     "mocha": "^2.1.0",
     "rimraf": "^2.2.8",
+    "style-loader": "^0.8.3",
     "touch": "0.0.3"
   },
   "repository": {

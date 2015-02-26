@@ -1,12 +1,23 @@
+import path from 'path';
 import webpack from 'webpack';
 import rimraf from 'rimraf';
 import fs from 'fs';
-import config from './webpack.basic.config';
+import config from './webpack.config';
 import touch from 'touch';
-
-var mapFilePath = config.plugins[0].outputFile;
+import AssetMapPlugin from '../src';
 
 describe('Basic use case', () => {
+  var baseDir = path.join(__dirname, 'app');
+  var mapFilePath;
+
+  beforeEach(function() {
+    config.plugins = [
+      new AssetMapPlugin(baseDir + '/assets/map.json')
+    ];
+
+    mapFilePath = config.plugins[0].outputFile;
+  });
+
   it('Generates map.json with map to asset entries', function (done) {
     rimraf(config.output.path, function() {
       webpack(config, function(err, stats) {
@@ -35,7 +46,8 @@ describe('Basic use case', () => {
         var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
         var map = JSON.parse(mapSrc).chunks;
 
-        map.index.should.match(/\/index-[0-9a-f]+\.js$/);
+        map.entry1.should.match(/\/entry1-[0-9a-f]+\.js$/);
+        map.entry2.should.match(/\/entry2-[0-9a-f]+\.js$/);
 
         done();
       });
@@ -49,22 +61,22 @@ describe('Basic use case', () => {
       var watcher;
       var lastMapStats;
       var assetMap = __dirname + '/app/assets/map.json';
-      var indexJs = __dirname + '/app/index.js';
+      var entry1Js = __dirname + '/app/entry1.js'
       var smiley = __dirname + '/app/smiley.jpeg';
       var watchCompletions = [
         function FirstWatchComplete() {
           lastMapStats = fs.statSync(assetMap);
-          touch.sync(indexJs);
+          touch.sync(entry1Js);
         },
         function SecondWatchComplete() {
           var newStats = fs.statSync(assetMap);
           newStats.mtime.should.eql(lastMapStats.mtime);
           touch.sync(smiley);
         },
-        function SecondWatchComplete() {
+        function ThirdWatchComplete() {
           var newStats = fs.statSync(assetMap);
           newStats.mtime.should.not.eql(lastMapStats.mtime);
-          touch.sync(indexJs);
+          touch.sync(entry1Js);
         },
         function LastWatchComplete() {
           watcher.close(done);
