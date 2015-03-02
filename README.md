@@ -6,13 +6,16 @@ Creates a json file that any server side technology can consume for asset declar
 
 ``` json
 {
-    "assets": {
-        "./smiley.jpeg": "/assets/smiley-db4f287d06928156270ca185fef0e026.jpeg",
-        "./test-checklist.jpeg": "/assets/test-checklist-b3b0fe76f4485db43467876f664d1f62.jpeg"
-    },
-    "chunks": {
-        "index": "/assets/index-2c9c445686f51177cf62.js"
-    }
+  "assets": {
+    "./smiley.jpeg": "/assets/smiley-db4f287d06928156270ca185fef0e026.jpeg",
+    "./test-checklist.jpeg": "/assets/test-checklist-b3b0fe76f4485db43467876f664d1f62.jpeg"
+  },
+  "chunks": {
+    "index": [
+      "/assets/index-2c9c445686f51177cf62.js"
+      "/assets/index-2c9c445686f51177cf62.css"
+    ]
+  }
 }
 ```
 

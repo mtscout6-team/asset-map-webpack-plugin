@@ -32,9 +32,14 @@ function ExtractAssets(modules, requestShortener, publicPath) {
 function ExtractChunks(chunks, publicPath) {
   var emitted = false;
   var chunks = chunks
-    .map(c => { return { name: c.name, file: c.files[0] }; })
+    .map(c => {
+      return {
+        name: c.name,
+        files: c.files.map(f => path.join(publicPath, f))
+      };
+    })
     .reduce((acc, c) => {
-      acc[c.name] = path.join(publicPath, c.file);
+      acc[c.name] = c.files;
       return acc;
     }, {});
 

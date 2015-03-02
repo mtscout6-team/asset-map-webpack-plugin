@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import path from 'path';
 import webpack from 'webpack';
 import rimraf from 'rimraf';
@@ -6,18 +7,17 @@ import config from './webpack.config';
 import touch from 'touch';
 import AssetMapPlugin from '../src';
 
-describe('Basic use case', () => {
-  var baseDir = path.join(__dirname, 'app');
-  var mapFilePath;
+config = _.cloneDeep(config);
 
-  beforeEach(function() {
-    config.plugins = [
-      new AssetMapPlugin(baseDir + '/assets/map.json')
-    ];
+var baseDir = path.join(__dirname, 'app');
 
-    mapFilePath = config.plugins[0].outputFile;
-  });
+config.plugins = [
+  new AssetMapPlugin(baseDir + '/assets/map.json')
+];
 
+var mapFilePath = config.plugins[0].outputFile;
+
+describe('Basic use case', function() {
   it('Generates map.json with map to asset entries', function (done) {
     rimraf(config.output.path, function() {
       webpack(config, function(err, stats) {
@@ -46,16 +46,22 @@ describe('Basic use case', () => {
         var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
         var map = JSON.parse(mapSrc).chunks;
 
-        map.entry1.should.match(/\/entry1-[0-9a-f]+\.js$/);
-        map.entry2.should.match(/\/entry2-[0-9a-f]+\.js$/);
+        expect(map.entry1.length).to.equal(1);
+        map.entry1[0].should.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);
+        expect(map.entry2.length).to.equal(1);
+        map.entry2[0].should.match(/^\/assets\/entry2-[0-9a-f]+\.js$/);
 
         done();
       });
     })
   });
 
+  // Since both Webpack and Mocha watch muck with module loading if you run
+  // mocha in watch mode it will keep re-running this module even without a
+  // file save.
   it('Only emits if an asset has changed', function(done){
     this.timeout(5000);
+
     rimraf(config.output.path, function() {
       var compiler = webpack(config);
       var watcher;
