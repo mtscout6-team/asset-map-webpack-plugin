@@ -35,7 +35,9 @@ function ExtractChunks(chunks, publicPath) {
     .map(c => {
       return {
         name: c.name,
-        files: c.files.map(f => path.join(publicPath, f))
+        files: c.files
+          .filter(f => path.extname(f) !== '.map')
+          .map(f => path.join(publicPath, f))
       };
     })
     .reduce((acc, c) => {

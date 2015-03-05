@@ -6,6 +6,7 @@ import fs from 'fs';
 import config from './webpack.config';
 import touch from 'touch';
 import AssetMapPlugin from '../src';
+import asyncTestWrapper from './async-test-wrapper';
 
 config = _.cloneDeep(config);
 
@@ -17,41 +18,41 @@ config.plugins = [
 
 var mapFilePath = config.plugins[0].outputFile;
 
-describe('Basic use case', function() {
-  it('Generates map.json with map to asset entries', function (done) {
-    rimraf(config.output.path, function() {
-      webpack(config, function(err, stats) {
-        if (err) throw err;
-        if (stats.hasErrors()) throw 'webpack has errors';
-        if (stats.hasWarnings()) throw 'webpack has warnings';
+describe('Basic use case', () => {
+  it('Generates map.json with map to asset entries', done => {
+    rimraf(config.output.path, () => {
+      webpack(config, (err, stats) => {
+        asyncTestWrapper(() => {
+          if (err) throw err;
+          if (stats.hasErrors()) throw 'webpack has errors';
+          if (stats.hasWarnings()) throw 'webpack has warnings';
 
-        var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
-        var map = JSON.parse(mapSrc).assets;
+          var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
+          var map = JSON.parse(mapSrc).assets;
 
-        map['../smiley.jpeg'].should.match(/\/smiley-[0-9a-f]+\.jpeg$/);
-        map['../test-checklist.jpeg'].should.match(/\/test-checklist-[0-9a-f]+\.jpeg$/);
-
-        done();
+          map['../smiley.jpeg'].should.match(/\/smiley-[0-9a-f]+\.jpeg$/);
+          map['../test-checklist.jpeg'].should.match(/\/test-checklist-[0-9a-f]+\.jpeg$/);
+        }, done);
       });
     })
   });
 
-  it('Generates map.json with map to chunk entries', function (done) {
-    rimraf(config.output.path, function() {
-      webpack(config, function(err, stats) {
-        if (err) throw err;
-        if (stats.hasErrors()) throw 'webpack has errors';
-        if (stats.hasWarnings()) throw 'webpack has warnings';
+  it('Generates map.json with map to chunk entries', done => {
+    rimraf(config.output.path, () => {
+      webpack(config, (err, stats) => {
+        asyncTestWrapper(() => {
+          if (err) throw err;
+          if (stats.hasErrors()) throw 'webpack has errors';
+          if (stats.hasWarnings()) throw 'webpack has warnings';
 
-        var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
-        var map = JSON.parse(mapSrc).chunks;
+          var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
+          var map = JSON.parse(mapSrc).chunks;
 
-        expect(map.entry1.length).to.equal(1);
-        map.entry1[0].should.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);
-        expect(map.entry2.length).to.equal(1);
-        map.entry2[0].should.match(/^\/assets\/entry2-[0-9a-f]+\.js$/);
-
-        done();
+          expect(map.entry1.length).to.equal(1);
+          map.entry1[0].should.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);
+          expect(map.entry2.length).to.equal(1);
+          map.entry2[0].should.match(/^\/assets\/entry2-[0-9a-f]+\.js$/);
+        }, done);
       });
     })
   });
@@ -59,10 +60,10 @@ describe('Basic use case', function() {
   // Since both Webpack and Mocha watch muck with module loading if you run
   // mocha in watch mode it will keep re-running this module even without a
   // file save.
-  it('Only emits if an asset has changed', function(done){
+  it('Only emits if an asset has changed', function(done) {
     this.timeout(5000);
 
-    rimraf(config.output.path, function() {
+    rimraf(config.output.path, () => {
       var compiler = webpack(config);
       var watcher;
       var lastMapStats;
@@ -89,19 +90,27 @@ describe('Basic use case', function() {
         }
       ];
       var next = watchCompletions.reverse()
-        .reduce(function(acc, func) {
-          return function() {
+        .reduce((acc, func) => {
+          return () => {
             next = acc;
             func();
           };
-        }, function() { /* NO OP */ });
+        }, () => { /* NO OP */ });
 
-      watcher = compiler.watch(1000, function(err, stats) {
-        if (err) throw err;
-        if (stats.hasErrors()) throw 'webpack has errors';
-        if (stats.hasWarnings()) throw 'webpack has warnings';
+      watcher = compiler.watch(1000, (err, stats) => {
+        try {
+          if (err) throw err;
+          if (stats.hasErrors()) throw 'webpack has errors';
+          if (stats.hasWarnings()) throw 'webpack has warnings';
 
-        next();
+          next();
+        } catch (e) {
+          if (watcher) {
+            watcher.close();
+          }
+
+          done(e);
+        }
       });
     })
   });
