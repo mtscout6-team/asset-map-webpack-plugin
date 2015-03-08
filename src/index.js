@@ -69,7 +69,7 @@ export default class AssetMapPlugin {
       var [chunksEmitted, chunks] = ExtractChunks(stats.compilation.chunks, publicPath);
 
       if (assetsEmitted || chunksEmitted) {
-        fs.writeFileSync(this.outputFile, JSON.stringify({ assets, chunks }));
+        fs.writeFileSync(this.outputFile, JSON.stringify({ assets, chunks }, null, 2));
       }
     });
   }
