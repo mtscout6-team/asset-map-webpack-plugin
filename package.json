@@ -1,6 +1,6 @@
 {
   "name": "asset-map-webpack-plugin",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Webpack plugin that creates a map of assets to public url slug for server agnostic usage.",
   "main": "lib/index.js",
   "scripts": {
