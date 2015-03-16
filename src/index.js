@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import url from 'url';
 import RequestShortener from 'webpack/lib/RequestShortener';
 
 function ExtractAssets(modules, requestShortener, publicPath) {
@@ -22,7 +23,7 @@ function ExtractAssets(modules, requestShortener, publicPath) {
     }).filter(m => {
       return m !== undefined;
     }).reduce((acc, m) => {
-      acc[m.name] = path.join(publicPath, m.asset);
+        acc[m.name] = url.resolve(publicPath, m.asset);
       return acc;
     }, {});
 
@@ -37,7 +38,7 @@ function ExtractChunks(chunks, publicPath) {
         name: c.name,
         files: c.files
           .filter(f => path.extname(f) !== '.map')
-          .map(f => path.join(publicPath, f))
+          .map(f => url.resolve(publicPath, f))
       };
     })
     .reduce((acc, c) => {

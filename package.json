@@ -10,6 +10,7 @@
   "author": "Matt Smith <mtscout6@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "url": "^0.10.3",
     "webpack": "^1.5.3"
   },
   "devDependencies": {
