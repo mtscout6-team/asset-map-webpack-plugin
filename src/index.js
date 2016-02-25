@@ -3,6 +3,8 @@ import path from 'path';
 import url from 'url';
 import RequestShortener from 'webpack/lib/RequestShortener';
 
+let previousChunks = {};
+
 function ExtractAssets(modules, requestShortener, publicPath) {
   var emitted = false;
   var assets = modules
@@ -31,8 +33,7 @@ function ExtractAssets(modules, requestShortener, publicPath) {
 }
 
 function ExtractChunks(chunks, publicPath) {
-  var emitted = false;
-  var chunks = chunks
+  var mappedChunks = chunks
     .map(c => {
       return {
         name: c.name,
@@ -46,7 +47,10 @@ function ExtractChunks(chunks, publicPath) {
       return acc;
     }, {});
 
-  return [emitted, chunks];
+  let emitted = JSON.stringify(previousChunks) !== JSON.stringify(mappedChunks);
+  previousChunks = mappedChunks;
+
+  return [emitted, mappedChunks];
 }
 
 export default class AssetMapPlugin {
@@ -62,12 +66,12 @@ export default class AssetMapPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin('done', stats => {
-      var publicPath = stats.compilation.outputOptions.publicPath;
+    compiler.plugin('done', ({ compilation }) => {
+      var publicPath = compilation.outputOptions.publicPath;
       var requestShortener = new RequestShortener(this.relativeTo || path.dirname(this.outputFile));
 
-      var [assetsEmitted, assets] = ExtractAssets(stats.compilation.modules, requestShortener, publicPath);
-      var [chunksEmitted, chunks] = ExtractChunks(stats.compilation.chunks, publicPath);
+      var [assetsEmitted, assets] = ExtractAssets(compilation.modules, requestShortener, publicPath);
+      var [chunksEmitted, chunks] = ExtractChunks(compilation.chunks, publicPath);
 
       if (assetsEmitted || chunksEmitted) {
         fs.writeFileSync(this.outputFile, JSON.stringify({ assets, chunks }, null, 2));
