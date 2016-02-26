@@ -61,7 +61,7 @@ describe('Basic use case', () => {
   // mocha in watch mode it will keep re-running this module even without a
   // file save.
   it('Only emits if an asset has changed', function(done) {
-    this.timeout(5000);
+    this.timeout(6000);
 
     rimraf(config.output.path, () => {
       var compiler = webpack(config);
@@ -70,6 +70,7 @@ describe('Basic use case', () => {
       var assetMap = __dirname + '/app/assets/map.json';
       var entry1Js = __dirname + '/app/entry1.js'
       var smiley = __dirname + '/app/smiley.jpeg';
+      let buffer;
       var watchCompletions = [
         function FirstWatchComplete() {
           lastMapStats = fs.statSync(assetMap);
@@ -83,7 +84,14 @@ describe('Basic use case', () => {
         function ThirdWatchComplete() {
           var newStats = fs.statSync(assetMap);
           newStats.mtime.should.not.eql(lastMapStats.mtime);
-          touch.sync(entry1Js);
+          lastMapStats = newStats;
+          buffer = fs.readFileSync(entry1Js, 'utf8');
+          fs.writeFileSync(entry1Js, buffer + "console.log('we made it!');", null, 2);
+        },
+        function TestChunkRewrite() {
+          let newStats = fs.statSync(assetMap);
+          newStats.mtime.should.not.eql(lastMapStats.mtime);
+          fs.writeFileSync(entry1Js, buffer, null, 2);
         },
         function LastWatchComplete() {
           watcher.close(done);

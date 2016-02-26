@@ -47,7 +47,7 @@ function ExtractChunks(chunks, publicPath) {
       return acc;
     }, {});
 
-  let emitted = JSON.stringify(previousChunks) !== JSON.stringify(mappedChunks);
+  const emitted = JSON.stringify(previousChunks) !== JSON.stringify(mappedChunks);
   previousChunks = mappedChunks;
 
   return [emitted, mappedChunks];
