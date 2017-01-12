@@ -19,6 +19,7 @@ var mapFilePath = config.plugins[0].outputFile;
 
 describe('Relative to use case', () => {
   it('Generates map.json with map to asset entries, relative to alternate path', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -37,6 +38,7 @@ describe('Relative to use case', () => {
   });
 
   it('Generates map.json with map to chunk entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {

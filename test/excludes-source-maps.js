@@ -22,6 +22,7 @@ var mapFilePath = config.plugins[0].outputFile;
 
 describe('With source maps enabled', () => {
   it('Generates map.json with map to asset entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -40,6 +41,7 @@ describe('With source maps enabled', () => {
   });
 
   it('Generates map.json with map to chunk entries, without map files', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {

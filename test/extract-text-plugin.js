@@ -31,6 +31,7 @@ var mapFilePath = config.plugins[0].outputFile;
 
 describe('Extract text plugin use case', () => {
   it('Generates map.json with map to asset entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -49,6 +50,7 @@ describe('Extract text plugin use case', () => {
   });
 
   it('Generates map.json with map to chunk entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {

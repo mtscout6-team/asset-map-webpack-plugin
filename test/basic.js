@@ -20,6 +20,7 @@ var mapFilePath = config.plugins[0].outputFile;
 
 describe('Basic use case', () => {
   it('Generates map.json with map to asset entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -38,6 +39,7 @@ describe('Basic use case', () => {
   });
 
   it('Generates map.json with map to chunk entries', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -61,34 +63,48 @@ describe('Basic use case', () => {
   // mocha in watch mode it will keep re-running this module even without a
   // file save.
   it('Only emits if an asset has changed', function(done) {
-    this.timeout(6000);
+    this.timeout(10000);
 
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       var compiler = webpack(config);
       var watcher;
       var lastMapStats;
       var assetMap = __dirname + '/app/assets/map.json';
       var entry1Js = __dirname + '/app/entry1.js'
+      var entry2Js = __dirname + '/app/entry2.js'
       var smiley = __dirname + '/app/smiley.jpeg';
       let buffer;
       var watchCompletions = [
-        function FirstWatchComplete() {
+        function StartWatch() {
+          touch.sync(entry2Js);
+        },
+        function TouchAsset() {
           lastMapStats = fs.statSync(assetMap);
           touch.sync(entry1Js);
         },
-        function SecondWatchComplete() {
+        function Wait() {
+          touch.sync(entry2Js);
+        },
+        function ExpectNoChangeAndTouchImage() {
           var newStats = fs.statSync(assetMap);
           newStats.mtime.should.eql(lastMapStats.mtime);
           touch.sync(smiley);
         },
-        function ThirdWatchComplete() {
+        function Wait() {
+          touch.sync(entry2Js);
+        },
+        function ExpectChangeAndRewriteAsset() {
           var newStats = fs.statSync(assetMap);
           newStats.mtime.should.not.eql(lastMapStats.mtime);
           lastMapStats = newStats;
           buffer = fs.readFileSync(entry1Js, 'utf8');
           fs.writeFileSync(entry1Js, buffer + "console.log('we made it!');", null, 2);
         },
-        function TestChunkRewrite() {
+        function Wait() {
+          touch.sync(entry2Js);
+        },
+        function ExpectChange() {
           let newStats = fs.statSync(assetMap);
           newStats.mtime.should.not.eql(lastMapStats.mtime);
           fs.writeFileSync(entry1Js, buffer, null, 2);

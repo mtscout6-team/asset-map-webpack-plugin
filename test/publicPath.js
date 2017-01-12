@@ -20,6 +20,7 @@ var mapFilePath = config.plugins[0].outputFile;
 
 describe('Should work with relative and absolute publicPath', () => {
   it('Generates map.json with relative urls if publicPath is relative', done => {
+    config.plugins[0].previousChunks = {};
     rimraf(config.output.path, () => {
       webpack(config, (err, stats) => {
         asyncTestWrapper(() => {
@@ -38,6 +39,7 @@ describe('Should work with relative and absolute publicPath', () => {
   });
 
   it('Generates map.json with absolute urls if publicPath is absolute', done => {
+      config.plugins[0].previousChunks = {};
       rimraf(config.output.path, () => {
       config.output.publicPath = 'https://mycdn.mysite.com/';
       webpack(config, (err, stats) => {
