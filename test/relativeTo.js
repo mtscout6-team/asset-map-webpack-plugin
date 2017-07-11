@@ -5,11 +5,11 @@ import path from 'path';
 import webpack from 'webpack';
 import rimraf from 'rimraf';
 import fs from 'fs';
-import config from './webpack.config';
+import defaultConfig from './webpack.config';
 import AssetMapPlugin from '../src';
 import asyncTestWrapper from './async-test-wrapper';
 
-config = _.cloneDeep(config);
+const config = _.cloneDeep(defaultConfig);
 
 const baseDir = path.join(__dirname, 'app');
 
