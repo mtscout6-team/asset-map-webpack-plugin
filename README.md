@@ -34,8 +34,8 @@ module.exports = {
     /**
      * AssetMapPlugin
      *
-     * @param {string} outputFile - Where to write the asset map file
-     * @param {string} [relativeTo] - Key assets relative to this path, otherwise defaults to be relative to the directory where the outputFile is written
+     * @param {string} outputFile - What to name the output JSON file (written to the same directory as the other webpack assets)
+     * @param {string} [relativeTo] - Key assets relative to this path, otherwise defaults to be relative to webpack `path`
      */
     new AssetMapPlugin(outputFilename, relativeTo)
   ]

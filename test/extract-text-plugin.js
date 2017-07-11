@@ -23,11 +23,11 @@ config.module.loaders = config.module.loaders.map(l => {
 });
 
 config.plugins = [
-  new AssetMapPlugin(baseDir + '/assets/map.json'),
+  new AssetMapPlugin('map.json'),
   new ExtractTextPlugin('[name]-[chunkhash].css')
 ];
 
-var mapFilePath = config.plugins[0].outputFile;
+var mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
 
 describe('Extract text plugin use case', () => {
   it('Generates map.json with map to asset entries', done => {

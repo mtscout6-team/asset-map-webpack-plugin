@@ -12,10 +12,10 @@ config = _.cloneDeep(config);
 var baseDir = path.join(__dirname, 'app');
 
 config.plugins = [
-  new AssetMapPlugin(baseDir + '/assets/map.json', baseDir)
+  new AssetMapPlugin('map.json', baseDir)
 ];
 
-var mapFilePath = config.plugins[0].outputFile;
+var mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
 
 describe('Relative to use case', () => {
   it('Generates map.json with map to asset entries, relative to alternate path', done => {

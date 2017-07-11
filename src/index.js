@@ -66,15 +66,14 @@ export default class AssetMapPlugin {
   apply(compiler) {
     compiler.plugin('emit', (compilation, done) => {
       const publicPath = compilation.outputOptions.publicPath;
-      const requestShortener = new RequestShortener(this.relativeTo || path.dirname(this.outputFile));
+      const requestShortener = new RequestShortener(this.relativeTo || compilation.outputOptions.path);
 
       const [assetsEmitted, assets] = this._extractAssets(compilation.modules, requestShortener, publicPath);
       const [chunksEmitted, chunks] = this._extractChunks(compilation.chunks, publicPath);
 
       if (assetsEmitted || chunksEmitted) {
         const out = JSON.stringify({ assets, chunks }, null, 2);
-        const assetName = this.outputFile.split(compilation.outputOptions.path).pop();
-        compilation.assets[assetName] = {
+        compilation.assets[this.outputFile] = {
           source: () => {
             return out;
           },

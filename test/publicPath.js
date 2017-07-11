@@ -13,10 +13,10 @@ config = _.cloneDeep(config);
 var baseDir = path.join(__dirname, 'app');
 
 config.plugins = [
-  new AssetMapPlugin(baseDir + '/assets/map.json')
+  new AssetMapPlugin('map.json')
 ];
 
-var mapFilePath = config.plugins[0].outputFile;
+var mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
 
 describe('Should work with relative and absolute publicPath', () => {
   it('Generates map.json with relative urls if publicPath is relative', done => {

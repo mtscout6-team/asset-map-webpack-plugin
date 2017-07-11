@@ -13,12 +13,12 @@ config = _.cloneDeep(config);
 var baseDir = path.join(__dirname, 'app');
 
 config.plugins = [
-  new AssetMapPlugin(baseDir + '/assets/map.json')
+  new AssetMapPlugin('map.json')
 ];
 
 config.devtool = 'sourcemap';
 
-var mapFilePath = config.plugins[0].outputFile;
+var mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
 
 describe('With source maps enabled', () => {
   it('Generates map.json with map to asset entries', done => {
