@@ -36,6 +36,12 @@
     "webpack",
     "webpack-plugin"
   ],
+  "files": [
+    "lib/index.js",
+    "src/index.js",
+    "package.json",
+    "README.md"
+  ],
   "bugs": {
     "url": "https://github.com/mtscout6/asset-map-webpack-plugin/issues"
   },
