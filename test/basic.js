@@ -1,3 +1,5 @@
+/* global __dirname describe it expect */
+
 import _ from 'lodash';
 import path from 'path';
 import webpack from 'webpack';
@@ -31,11 +33,11 @@ describe('Basic use case', () => {
           const mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
           const map = JSON.parse(mapSrc).assets;
 
-          map['../smiley.jpeg'].should.match(/\/smiley-[0-9a-f]+\.jpeg$/);
-          map['../test-checklist.jpeg'].should.match(/\/test-checklist-[0-9a-f]+\.jpeg$/);
+          expect(map['../smiley.jpeg']).to.match(/\/smiley-[0-9a-f]+\.jpeg$/);
+          expect(map['../test-checklist.jpeg']).to.match(/\/test-checklist-[0-9a-f]+\.jpeg$/);
         }, done);
       });
-    })
+    });
   });
 
   it('Generates map.json with map to chunk entries', done => {
@@ -51,12 +53,12 @@ describe('Basic use case', () => {
           const map = JSON.parse(mapSrc).chunks;
 
           expect(map.entry1.length).to.equal(1);
-          map.entry1[0].should.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);
+          expect(map.entry1[0]).to.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);
           expect(map.entry2.length).to.equal(1);
-          map.entry2[0].should.match(/^\/assets\/entry2-[0-9a-f]+\.js$/);
+          expect(map.entry2[0]).to.match(/^\/assets\/entry2-[0-9a-f]+\.js$/);
         }, done);
       });
-    })
+    });
   });
 
   // Since both Webpack and Mocha watch muck with module loading if you run
@@ -88,7 +90,7 @@ describe('Basic use case', () => {
         },
         function ExpectNoChangeAndTouchImage() {
           const newStats = fs.statSync(assetMap);
-          newStats.mtime.should.eql(lastMapStats.mtime);
+          expect(newStats.mtime).to.eql(lastMapStats.mtime);
           touch.sync(smiley);
         },
         function Wait() {
@@ -96,7 +98,7 @@ describe('Basic use case', () => {
         },
         function ExpectChangeAndRewriteAsset() {
           const newStats = fs.statSync(assetMap);
-          newStats.mtime.should.not.eql(lastMapStats.mtime);
+          expect(newStats.mtime).to.not.eql(lastMapStats.mtime);
           lastMapStats = newStats;
           buffer = fs.readFileSync(entry1Js, 'utf8');
           fs.writeFileSync(entry1Js, `${buffer}console.log('we made it!');`, null, 2);
@@ -106,7 +108,7 @@ describe('Basic use case', () => {
         },
         function ExpectChange() {
           let newStats = fs.statSync(assetMap);
-          newStats.mtime.should.not.eql(lastMapStats.mtime);
+          expect(newStats.mtime).to.not.eql(lastMapStats.mtime);
           fs.writeFileSync(entry1Js, buffer, null, 2);
         },
         function LastWatchComplete() {
@@ -136,6 +138,6 @@ describe('Basic use case', () => {
           done(e);
         }
       });
-    })
+    });
   }).timeout(10000);
 });

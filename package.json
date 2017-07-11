@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "babel src --out-dir lib",
-    "test": "mocha --compilers js:babel/register"
+    "test": "mocha --compilers js:babel/register",
+    "lint": "eslint src/index.js test/*.js"
   },
   "author": "Matt Smith <mtscout6@gmail.com>",
   "license": "MIT",
@@ -17,6 +18,7 @@
     "babel": "^4.1.1",
     "chai": "^2.0.0",
     "css-loader": "^0.9.1",
+    "eslint": "^4.2.0",
     "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
     "less": "^2.4.0",
@@ -24,8 +26,7 @@
     "lodash": "^3.3.1",
     "mocha": "^2.1.0",
     "rimraf": "^2.2.8",
-    "style-loader": "^0.8.3",
-    "touch": "0.0.3"
+    "style-loader": "^0.8.3"
   },
   "repository": {
     "type": "git",

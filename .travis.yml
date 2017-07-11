@@ -3,3 +3,6 @@ node_js:
   - "4.8"  # Supported until April 2018.
   - "6.11" # Supported until April 2019.
   - "8.1"  # Supported until December 2019.
+script:
+  - npm test
+  - npm run lint

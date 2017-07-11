@@ -1,3 +1,5 @@
+/* global __dirname */
+
 import path from 'path';
 
 const baseDir = path.join(__dirname, 'app');

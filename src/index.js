@@ -1,3 +1,5 @@
+/* global Buffer */
+
 import path from 'path';
 import url from 'url';
 import RequestShortener from 'webpack/lib/RequestShortener';
@@ -35,7 +37,7 @@ export default class AssetMapPlugin {
       }).filter(m => {
         return m !== undefined;
       }).reduce((acc, m) => {
-          acc[m.name] = url.resolve(publicPath, m.asset);
+        acc[m.name] = url.resolve(publicPath, m.asset);
         return acc;
       }, {});
 
