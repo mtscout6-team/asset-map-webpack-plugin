@@ -41,6 +41,7 @@
   "files": [
     "lib/index.js",
     "src/index.js",
+    "LICENSE.txt",
     "package.json",
     "README.md"
   ],
