@@ -1,4 +1,4 @@
-export default function(test, done) {
+export default (test, done) => {
   try {
     test();
     done();

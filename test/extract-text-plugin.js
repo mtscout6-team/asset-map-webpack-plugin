@@ -11,7 +11,7 @@ import asyncTestWrapper from './async-test-wrapper';
 
 config = _.cloneDeep(config);
 
-var baseDir = path.join(__dirname, 'app');
+const baseDir = path.join(__dirname, 'app');
 
 config.module.loaders = config.module.loaders.map(l => {
   if (l.loader.indexOf('less') === -1) {
@@ -27,7 +27,7 @@ config.plugins = [
   new ExtractTextPlugin('[name]-[chunkhash].css')
 ];
 
-var mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
+const mapFilePath = path.join(baseDir, 'assets', config.plugins[0].outputFile);
 
 describe('Extract text plugin use case', () => {
   it('Generates map.json with map to asset entries', done => {
@@ -39,8 +39,8 @@ describe('Extract text plugin use case', () => {
           if (stats.hasErrors()) throw 'webpack has errors';
           if (stats.hasWarnings()) throw 'webpack has warnings';
 
-          var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
-          var map = JSON.parse(mapSrc).assets;
+          const mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
+          const map = JSON.parse(mapSrc).assets;
 
           map['../smiley.jpeg'].should.match(/\/smiley-[0-9a-f]+\.jpeg$/);
           map['../test-checklist.jpeg'].should.match(/\/test-checklist-[0-9a-f]+\.jpeg$/);
@@ -58,8 +58,8 @@ describe('Extract text plugin use case', () => {
           if (stats.hasErrors()) throw 'webpack has errors';
           if (stats.hasWarnings()) throw 'webpack has warnings';
 
-          var mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
-          var map = JSON.parse(mapSrc).chunks;
+          const mapSrc = fs.readFileSync(mapFilePath, {encoding: 'utf-8'});
+          const map = JSON.parse(mapSrc).chunks;
 
           expect(map.entry1.length).to.equal(2);
           map.entry1[0].should.match(/^\/assets\/entry1-[0-9a-f]+\.js$/);

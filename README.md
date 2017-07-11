@@ -26,9 +26,9 @@ The key is the relative path from the generated file to the image location in yo
 Add to the plugins array in your webpack config:
 
 ``` javascript
-var AssetMapPlugin = require('asset-map-webpack-plugin');
+import AssetMapPlugin from 'asset-map-webpack-plugin';
 
-module.exports = {
+export default {
   ...
   plugins: [
     /**

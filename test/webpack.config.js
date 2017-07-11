@@ -1,7 +1,8 @@
-var path = require('path');
-var baseDir = path.join(__dirname, 'app');
+import path from 'path';
 
-module.exports = {
+const baseDir = path.join(__dirname, 'app');
+
+export default {
   entry: {
     entry1: path.join(baseDir, 'entry1.js'),
     entry2: path.join(baseDir, 'entry2.js')
