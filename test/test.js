@@ -1,7 +1,2 @@
-var chai = require('chai');
-chai.should();
+import chai from 'chai';
 global.expect = chai.expect;
-
-require('./basic');
-require('./relativeTo');
-require('./extract-text-plugin');

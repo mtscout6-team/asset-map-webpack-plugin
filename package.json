@@ -1,11 +1,12 @@
 {
   "name": "asset-map-webpack-plugin",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Webpack plugin that creates a map of assets to public url slug for server agnostic usage.",
   "main": "lib/index.js",
   "scripts": {
     "prepublish": "babel src --out-dir lib",
-    "test": "mocha --compilers js:babel/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "lint": "eslint src/index.js test/*.js"
   },
   "author": "Matt Smith <mtscout6@gmail.com>",
   "license": "MIT",
@@ -14,18 +15,20 @@
     "webpack": "^1.5.3"
   },
   "devDependencies": {
-    "babel": "^4.1.1",
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^2.0.0",
     "css-loader": "^0.9.1",
+    "eslint": "^4.2.0",
     "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
     "less": "^2.4.0",
     "less-loader": "^2.0.0",
     "lodash": "^3.3.1",
-    "mocha": "^2.1.0",
+    "mocha": "^3.4.2",
     "rimraf": "^2.2.8",
     "style-loader": "^0.8.3",
-    "touch": "0.0.3"
+    "touch": "^3.1.0"
   },
   "repository": {
     "type": "git",
@@ -34,6 +37,13 @@
   "keywords": [
     "webpack",
     "webpack-plugin"
+  ],
+  "files": [
+    "lib/index.js",
+    "src/index.js",
+    "LICENSE.txt",
+    "package.json",
+    "README.md"
   ],
   "bugs": {
     "url": "https://github.com/mtscout6/asset-map-webpack-plugin/issues"

@@ -26,16 +26,16 @@ The key is the relative path from the generated file to the image location in yo
 Add to the plugins array in your webpack config:
 
 ``` javascript
-var AssetMapPlugin = require('asset-map-webpack-plugin');
+import AssetMapPlugin from 'asset-map-webpack-plugin';
 
-module.exports = {
+export default {
   ...
   plugins: [
     /**
      * AssetMapPlugin
      *
-     * @param {string} outputFile - Where to write the asset map file
-     * @param {string} [relativeTo] - Key assets relative to this path, otherwise defaults to be relative to the directory where the outputFile is written
+     * @param {string} outputFile - What to name the output JSON file (written to the same directory as the other webpack assets)
+     * @param {string} [relativeTo] - Key assets relative to this path, otherwise defaults to be relative to webpack `path`
      */
     new AssetMapPlugin(outputFilename, relativeTo)
   ]

@@ -1,57 +1,8 @@
-import fs from 'fs';
+/* global Buffer */
+
 import path from 'path';
 import url from 'url';
 import RequestShortener from 'webpack/lib/RequestShortener';
-
-let previousChunks = {};
-
-function ExtractAssets(modules, requestShortener, publicPath) {
-  var emitted = false;
-  var assets = modules
-    .map(m => {
-      var assets = Object.keys(m.assets || {});
-
-      if (assets.length === 0) {
-        return undefined;
-      }
-
-      var asset = assets[0];
-      emitted = emitted || m.assets[asset].emitted;
-
-      return {
-        name: m.readableIdentifier(requestShortener),
-        asset: asset
-      };
-    }).filter(m => {
-      return m !== undefined;
-    }).reduce((acc, m) => {
-        acc[m.name] = url.resolve(publicPath, m.asset);
-      return acc;
-    }, {});
-
-  return [emitted, assets];
-}
-
-function ExtractChunks(chunks, publicPath) {
-  var mappedChunks = chunks
-    .map(c => {
-      return {
-        name: c.name,
-        files: c.files
-          .filter(f => path.extname(f) !== '.map')
-          .map(f => url.resolve(publicPath, f))
-      };
-    })
-    .reduce((acc, c) => {
-      acc[c.name] = c.files;
-      return acc;
-    }, {});
-
-  const emitted = JSON.stringify(previousChunks) !== JSON.stringify(mappedChunks);
-  previousChunks = mappedChunks;
-
-  return [emitted, mappedChunks];
-}
 
 export default class AssetMapPlugin {
   /**
@@ -63,19 +14,77 @@ export default class AssetMapPlugin {
   constructor(outputFile, relativeTo) {
     this.outputFile = outputFile;
     this.relativeTo = relativeTo;
+    this.previousChunks = {};
+  }
+
+  _extractAssets(modules, requestShortener, publicPath) {
+    let emitted = false;
+    const mappedAssets = modules
+      .map(m => {
+        const assets = Object.keys(m.assets || {});
+
+        if (assets.length === 0) {
+          return undefined;
+        }
+
+        const asset = assets[0];
+        emitted = emitted || m.assets[asset].emitted;
+
+        return {
+          name: m.readableIdentifier(requestShortener),
+          asset: asset
+        };
+      }).filter(m => {
+        return m !== undefined;
+      }).reduce((acc, m) => {
+        acc[m.name] = url.resolve(publicPath, m.asset);
+        return acc;
+      }, {});
+
+    return [emitted, mappedAssets];
+  }
+
+  _extractChunks(chunks, publicPath) {
+    const mappedChunks = chunks
+      .map(c => {
+        return {
+          name: c.name,
+          files: c.files
+            .filter(f => path.extname(f) !== '.map')
+            .map(f => url.resolve(publicPath, f))
+        };
+      })
+      .reduce((acc, c) => {
+        acc[c.name] = c.files;
+        return acc;
+      }, {});
+
+    const emitted = JSON.stringify(this.previousChunks) !== JSON.stringify(mappedChunks);
+    this.previousChunks = mappedChunks;
+
+    return [emitted, mappedChunks];
   }
 
   apply(compiler) {
-    compiler.plugin('done', ({ compilation }) => {
-      var publicPath = compilation.outputOptions.publicPath;
-      var requestShortener = new RequestShortener(this.relativeTo || path.dirname(this.outputFile));
+    compiler.plugin('emit', (compilation, done) => {
+      const publicPath = compilation.outputOptions.publicPath;
+      const requestShortener = new RequestShortener(this.relativeTo || compilation.outputOptions.path);
 
-      var [assetsEmitted, assets] = ExtractAssets(compilation.modules, requestShortener, publicPath);
-      var [chunksEmitted, chunks] = ExtractChunks(compilation.chunks, publicPath);
+      const [assetsEmitted, assets] = this._extractAssets(compilation.modules, requestShortener, publicPath);
+      const [chunksEmitted, chunks] = this._extractChunks(compilation.chunks, publicPath);
 
       if (assetsEmitted || chunksEmitted) {
-        fs.writeFileSync(this.outputFile, JSON.stringify({ assets, chunks }, null, 2));
+        const out = JSON.stringify({ assets, chunks }, null, 2);
+        compilation.assets[this.outputFile] = {
+          source: () => {
+            return out;
+          },
+          size: () => {
+            return Buffer.byteLength(out, 'utf8');
+          }
+        };
       }
+      done();
     });
   }
 }
