@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mtscout6/asset-map-webpack-plugin.git"
+    "url": "https://github.com/mtscout6-team/asset-map-webpack-plugin.git"
   },
   "keywords": [
     "webpack",
@@ -46,7 +46,7 @@
     "README.md"
   ],
   "bugs": {
-    "url": "https://github.com/mtscout6/asset-map-webpack-plugin/issues"
+    "url": "https://github.com/mtscout6-team/asset-map-webpack-plugin/issues"
   },
-  "homepage": "https://github.com/mtscout6/asset-map-webpack-plugin"
+  "homepage": "https://github.com/mtscout6-team/asset-map-webpack-plugin"
 }
