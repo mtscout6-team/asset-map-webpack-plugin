@@ -17,10 +17,10 @@ export default {
   },
 
   module: {
-    loaders: [
-      { test: /\.css$/, loader: 'style!css' },
-      { test: /\.less/, loader: 'style!css!less' },
-      { test: /\.jpeg/, loader: 'file?name=[name]-[hash].[ext]' }
+    rules: [
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.less/, use: ['style-loader', 'css-loader', 'less-loader'] },
+      { test: /\.jpeg/, use: 'file-loader?name=[name]-[hash].[ext]' }
     ]
   }
 };
