@@ -14,12 +14,12 @@ const config = _.cloneDeep(defaultConfig);
 
 const baseDir = path.join(__dirname, 'app');
 
-config.module.loaders = config.module.loaders.map(l => {
-  if (l.loader.indexOf('less') === -1) {
+config.module.rules = config.module.rules.map(l => {
+  if (!Array.isArray(l.use) || !l.use.includes('less-loader')) {
     return l;
   }
 
-  l.loader = ExtractTextPlugin.extract('style', 'css!less');
+  l.use = ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'less-loader'] });
   return l;
 });
 

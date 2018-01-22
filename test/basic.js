@@ -94,6 +94,11 @@ describe('Basic use case', () => {
           touch.sync(smiley);
         },
         function Wait() {
+          // twice to ensure it's done before the next step
+          touch.sync(entry2Js);
+        },
+        function Wait() {
+          // twice to ensure it's done before the next step
           touch.sync(entry2Js);
         },
         function ExpectChangeAndRewriteAsset() {
@@ -139,5 +144,5 @@ describe('Basic use case', () => {
         }
       });
     });
-  }).timeout(10000);
+  }).timeout(15000);
 });

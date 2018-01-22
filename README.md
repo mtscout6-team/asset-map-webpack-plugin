@@ -23,6 +23,8 @@ The key is the relative path from the generated file to the image location in yo
 
 ## Usage
 
+For webpack 1, use version 2.x of `asset-map-webpack-plugin`; for webpack 2/3, use version 3.x.
+
 Add to the plugins array in your webpack config:
 
 ``` javascript
